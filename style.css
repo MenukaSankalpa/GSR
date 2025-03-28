@@ -55,24 +55,18 @@ body{
     visibility: hidden;
 
 }
-
-/*.form-box.login{
-    display: block;
-}
-.form-box.register {
-    display: none;
-}
-.container.active .form-box{
-    right: 50%;
-}
 .form-box.register{
-    visibility: hidden;
-}
-.register.active .container.form-box{
-    visibility: hidden;
-}*/
-form{
-    width: 100%;
+    position: absolute;
+    right: 0;
+    width: 30%;
+    height: 80%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    color: #333;
+    text-align: center;
+    margin-top: 0;
+    font-size: 5px;
 }
 .container h1{
     font-size: 36px;
