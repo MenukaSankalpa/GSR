@@ -36,6 +36,7 @@ body{
     align-items: center;
     color: #333;
     text-align: center;
+    padding: 40px;
 }
 form{
     width: 100%;
@@ -50,18 +51,30 @@ form{
 }
 .input-box input{
     width: 100%;
-    padding: 13px;
+    padding: 13px 50px 13px 20px;
     background: #eee;
     border-radius: 8px;
     border: none;
     outline: none;
-    font: 16pxl;
+    font: 16px;
     color: #333;
-    font-weight: 500;
+    font-weight: 600;
+}
+select{
+    width: 100%;
+    padding: 13px 50px 13px 20px;
+    background: #eee;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font: 16px;
+    color: #333;
+    font-weight: 600;
+
 }
 .input-box input::placeholder{
     color: #888;
-    font-weight: 400;
+    font-weight: 600;
 }
 .input-box i {
     position: absolute;
@@ -70,4 +83,49 @@ form{
     transform: translateY(-50%);
     font-size: 20px;
     color: #888;
+}
+.forgot-link{
+    margin: -15px 0 15px;
+}
+.forgot-link a{
+    font-size: 14.5px;
+    color: #333;
+    text-decoration: none;
+}
+.btn {
+    width: 100%;
+    height: 48px;
+    background: var(--primary-color);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+}
+.btn:hover{
+    background: #2444afee;
+    color: white;
+}
+.container p{
+    font-size: 15px;
+    margin: 15px 0;
+}
+.social-icon a{
+    display: inline-flex;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 30px;
+    color: #333;
+    text-decoration: none;
+    margin: 10px 5px 0 0;
+    background-color: #ccc;
+    outline: none;
+    border: none;
+}
+/*.social-icon a:hover{
+    background: black;
+    color: white;
 }
