@@ -21,10 +21,11 @@ body{
 .container{
     position: relative;
     width: 850px;
-    height: 550px;
+    height: 680px;
     background: var(--background-color);
     border-radius: 30px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
 }
 .form-box {
     position: absolute;
@@ -159,6 +160,9 @@ select{
     justify-content: center;
     align-items: center;
     z-index: 2;
+}
+.toggle-panel.toggle-right{
+    right: -50%;
 }
 .toggle-panel p{
     margin-bottom: 20px;
