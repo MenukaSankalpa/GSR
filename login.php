@@ -19,4 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "No usr found this with email.";
     }
 }
+if (password_verify($password, $hashed_password)) {
+    header("Location: dashboard.php"); // Redirect to a dashboard
+    exit();
+}
+
 ?>
