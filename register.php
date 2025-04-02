@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     $sql = "INSERT INTO users (username, email, child_name, role, password) 
-            VALUES ('$username', '$$child_name', '$role', '$password')";
+            VALUES ('$username', '$child_name', '$role', '$password')";
 
     if ($conn->query($sql) === TRUE) {
         echo "Registation Successful!";
