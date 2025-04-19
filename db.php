@@ -2,7 +2,7 @@
 $servername  = "localhost";
 $username = "root";
 $password = "";
-$database = "school_db";
+$database = "school_admission_system";
 
 $conn = new mysqli($servername ,$username,$password,$database);
 
