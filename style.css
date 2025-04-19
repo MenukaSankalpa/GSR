@@ -214,3 +214,6 @@ select{
     border: 2px solid #fff;
     box-shadow: none;
 }
+#child-name-box {
+    display: none;
+}

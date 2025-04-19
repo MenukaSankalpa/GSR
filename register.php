@@ -20,7 +20,11 @@ if ($role == '3') {
     exit();
 }
 
+// child's name only if role is parent registration
+$child_name = ($role == '1') ? $_POST['child_name'] : 'N/A';
+
 // insert new user details
+
 $sql = "INSERT INTO users (username, email, child_name, role, password) VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sssis", $username, $email, $child_name, $role, $password );
