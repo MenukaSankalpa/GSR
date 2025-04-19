@@ -17,11 +17,11 @@ $password = md5($_POST['password']);
 
 if ($role == '3') {
     echo "<script>alert('Super Admin already exists. You can't register as Super Admin.'); window.location.href='index.html';</script>";
-    exit()
+    exit();
 }
 
 // insert new user details
-$sql = "INSERT INTO user (username, email, child_name, role, password) VALUES (?, ?, ?, ?, ?)";
+$sql = "INSERT INTO users (username, email, child_name, role, password) VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sssis", $username, $email, $child_name, $role, $password );
 

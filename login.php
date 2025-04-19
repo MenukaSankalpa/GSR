@@ -11,7 +11,7 @@ $password = md5($_POST['password']);
 
 $sql = "SELECT * FROM users WHERE email=? AND password=?";
 $stmt = $conn->prepare($sql);
-$stmt->blind_param("ss", $email, $password);
+$stmt->bind_param("ss", $email, $password);
 $stmt->execute();
 $result = $stmt->get_result();
 
