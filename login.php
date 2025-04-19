@@ -1,27 +1,36 @@
 <?php
-include 'db.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+$conn = new mysqli ("localhost", "root", "", "school_admission_system");
 
-    $sql = "SELECT * FROM users WHERE email= '$email'";
-    $result = $conn->query($sql);
+if ($conn->connect_error) {
+    die("Connection failed: ". $conn->connect_error);
+}
 
-    if ($result-> num_rows == 1) {
-        $row = $result->fetch_assoc();
-        if(password_verify($password, $row['password'])) {
-            echo "Login Successful! welcome, " .$row['username'];
-        } else {
-            echo "Invalid Password";
-        }
-    } else {
-        echo "No usr found this with email.";
+$email = $_POST['email'];
+$password = md5($_POST['password']);
+
+$sql = "SELECT * FROM users WHERE email=? AND password=?";
+$stmt = $conn->prepare($sql);
+$stmt->blind_param("ss", $email, $password);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if($result->num_rows === 1) {
+    $user = $result->fetch_assoc();
+    $role = $user['role'];
+
+    //Redirect pages based on roles 
+    if ($role == '1'){
+        header("Location: parent_dashboard.php");
+    } elseif ($role == '2') {
+        header("Location: admin_dashboard.php");
+    } elseif ($role == '3') {
+        header("Location: super_admin_dashboard.php");
     }
+} else {
+    echo ("<script>alert('Invalid Login Credentials!'); window.location.href='index.html'</script>");
 }
-if (password_verify($password, $hashed_password)) {
-    header("Location: dashboard.php"); // Redirect to a dashboard
-    exit();
-}
+
+$conn->close();
 
 ?>
