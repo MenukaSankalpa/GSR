@@ -1,23 +1,22 @@
 <?php
 
-$conn = new mysqli ("localhost", "root", "", "school_admission_system");
+include 'db.php';
 
-if ($conn->connect_error) {
-    die("Connection failed: ". $conn->connect_error);
-}
-
-$email = $_POST['email'];
+$userInput = $_POST['email'];
 $password = md5($_POST['password']);
 
-$sql = "SELECT * FROM users WHERE email=? AND password=?";
+$sql = "SELECT * FROM users WHERE (email=? OR username=? ) AND password=?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $email, $password);
+$stmt->bind_param("sss", $userInput, $userInput, $password);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if($result->num_rows === 1) {
     $user = $result->fetch_assoc();
     $role = $user['role'];
+
+    session_start();
+    $_SESSION['email'] = $user['email'];
 
     //Redirect pages based on roles 
     if ($role == '1'){
