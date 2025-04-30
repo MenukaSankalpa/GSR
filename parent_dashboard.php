@@ -5,8 +5,14 @@ if(!isset($_SESSION['email'])) {
     header("Location: index.html");
     exit();
 }
-$name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Parent';
-
+//$name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Parent';
+$email = $_SESSION['email'];
+$sql = "SELECT * FROM users WHERE email=?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -15,10 +21,32 @@ $name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Parent';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Dashboard</title>
-    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="dashboard.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqQzvjFRQDcaDNfu4OBIfj9lmQhTSkcLA&libraries=places"></script>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+        #map {
+            height: 40px;
+            width: 100%;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
+
+    <div class="dashboard">
+        <h2>Welcome, <?php echo $user['username']; ?>!</h2>
+        <form action="" class="" id="locationForm">
+            <input type="text" value="<?php echo $user['national_id']; ?>" readonly placeholder="Parent NIC Number">
+            <input type="text" value="<?php echo $user['child_name']; ?>" readonly>
+
+        </form>
+    </div>
+
+
     <h2>Welcome, Parent</h2>
     <div class="container">
 
