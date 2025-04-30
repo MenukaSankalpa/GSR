@@ -5,14 +5,14 @@ if(!isset($_SESSION['email'])) {
     header("Location: index.html");
     exit();
 }
-//$name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Parent';
+/*$name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Parent';
 $email = $_SESSION['email'];
 $sql = "SELECT * FROM users WHERE email=?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
-$user = $result->fetch_assoc();
+$user = $result->fetch_assoc();*/
 ?>
 
 <!DOCTYPE html>
@@ -37,39 +37,35 @@ $user = $result->fetch_assoc();
 </head>
 <body>
 
-    <div class="dashboard">
-        <h2>Welcome, <?php echo $user['username']; ?>!</h2>
+<h2>Welcome, <?php echo htmlspecialchars ($_SESSION['username']); ?>!</h2>
+<p>Child Name: <?php echo htmlspecialchars ($_SESSION['child_name']); ?></p>
+
+
+<form method="POST" action="find_schools.php">
+
+    <input type="text" name="nic" placeholder="NIC Number" required>
+
+</form>
+    <div class="dashboard">       
         <form action="" class="" id="locationForm">
             <input type="text" value="<?php echo $user['national_id']; ?>" readonly placeholder="Parent NIC Number">
             <input type="text" value="<?php echo $user['child_name']; ?>" readonly>
 
+            <select name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="boy">Boy</option>
+                <option value="girl">Girl</option>
+            </select>
+
+            <input type="test" id="address" name="address" placeholder="Type your address..." required> 
+
+            <input type="hidden" id="lat" name="latitude">
+            <input type="hidden" id="lng" name="longitude">
+
+            <div id="map"></div>
+
+            <button type="submit">Find Nearby Schools</button>
         </form>
-    </div>
-
-
-    <h2>Welcome, Parent</h2>
-    <div class="container">
-
-    <form id="locationForm">
-        <input type="text" name="national_id" placeholder="NIC Number" required><br>
-
-        
-        <select name="" id="child_gender" required placeholder="Child Gender">
-            <option value="boy">Boy</option>
-            <option value="girl">Girl</option>
-        </select><br>
-
-        <input type="text" id="autocomplete" placeholder="Enter Your Address" required>
-
-        <div id="map"></div>
-        <input type="hidden" id="latitude">
-        <input type="hidden" id="longitude">
-
-    </form>
-
-    <div id="schoolList"></div>
-    <script src="script.js"></script>
-
     </div>
 
 </body>
