@@ -13,10 +13,15 @@ $result = $stmt->get_result();
 
 if($result->num_rows === 1) {
     $user = $result->fetch_assoc();
-    $role = $user['role'];
+    //$role = $user['role'];
 
-    session_start();
     $_SESSION['email'] = $user['email'];
+    $_SESSION['username'] = $user['username'];
+    $_SESSION['child_name'] = $user['child_name'];
+    $_SESSION['role'] = $user['role'];
+
+    //session_start();
+    //$_SESSION['email'] = $user['email'];
 
     //Redirect pages based on roles 
     if ($role == '1'){
