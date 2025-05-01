@@ -54,3 +54,30 @@ nav{
 .download-btn:hover{
     background-color: #000000;
 }
+.container{
+    margin-left: 20%;
+    margin-top: 20px;
+    position: relative;
+    width: 850px;
+    height: 580px;
+    background: var(--background-color);
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+.form-box {
+    padding-top: 15px;
+    padding-left: 50px;
+    position: relative;
+    background: #fff;
+    display: flex;
+    color: #333;
+    text-align: center;
+}
+.form-box h1{
+    margin-bottom: 12px;
+    text-align: center;
+}
+.form-box .input-box{
+    width: 100%;
+}
