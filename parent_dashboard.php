@@ -50,7 +50,7 @@ $_SESSION['child_name'] = $user['child_name'];
 
 <div class="dashboard">
     <form action="find_schools.php" method="POST" id="locationForm">
-        <input type="text" name="nic" value="<?php echo htmlspecialchars($user['national_id']); ?>" readonly placeholder="Parent NIC Number">
+        <input type="text" name="nic" placeholder="NIC Number" required>
         <input type="text" name="child_name" value="<?php echo htmlspecialchars($user['child_name']); ?>" readonly>
 
         <select name="gender" required>
@@ -60,14 +60,53 @@ $_SESSION['child_name'] = $user['child_name'];
         </select>
 
         <input type="text" id="address" name="address" placeholder="Type your address..." required> 
-        <input type="hidden" id="lat" name="latitude">
-        <input type="hidden" id="lng" name="longitude">
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
 
         <div id="map"></div>
         <button type="submit">Find Nearby Schools</button>
     </form>
 </div>
+<script>
+    let map;
+    let marker;
 
+    function initMap(){
+        const defaultLocation = { lat: 6.9271, lng: 79.8612};
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: defaultLocation,
+            zoom: 12
+        });
+
+        const input = document.getElementById("address");
+        cost autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo("bounds", map);
+
+        autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+            if(!place.geometry || !place.geometry.location){
+                alert("No details available for the input");
+                return,
+            }
+
+            if(marker) marker.setMap(null);
+            marker = new google.maps.Marker({
+                position: place.geometry.location,
+                map: map 
+            });
+
+            map.setCenter(place.geometry.location);
+            map.setZoom(15);
+
+            document.getElementById("lat").value = place.geometry.location.lat();
+            document.getElementById("lng").value = place.geometry.location.lng();
+        });
+    }
+
+    window.initMap = initMap;
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqQzvjFRQDcaDNfu4OBIfj9lmQhTSkcLA&libraries=places"></script>
 
 </body>
 </html>
