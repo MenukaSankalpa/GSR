@@ -29,11 +29,23 @@ $_SESSION['child_name'] = $user['child_name'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqQzvjFRQDcaDNfu4OBIfj9lmQhTSkcLA&libraries=places"></script>
     <style>
         body {
-            font-family: Arial;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            padding-top: 30px;
+            padding-left: 500px;
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(90deg, var(--primary-second-color), var(--primary-color));
+            flex-direction: column;
+            text-align: center;
+        }
+        h2{
+            font-size: 25px;
         }
         #map {
             height: 40px;
@@ -44,7 +56,7 @@ $_SESSION['child_name'] = $user['child_name'];
 </head>
 <body>
 
-<h2>Welcome, <?php echo htmlspecialchars ($_SESSION['username'] ?? 'Parent'); ?>!</h2>
+<h2>Welcome, <span class="parent-name"><?php echo htmlspecialchars ($_SESSION['username'] ?? 'Parent'); ?></span>!</h2>
 <p>Child Name: <?php echo htmlspecialchars ($_SESSION['child_name'] ?? ''); ?></p>
 
 

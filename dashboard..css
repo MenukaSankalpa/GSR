@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root{
+    --primary-color: #688ff3;
+    --primary-second-color: #f5f9fa;
+    --background-color: #FFFFF7;
+}
+h2{
+  color: #f5f9fa;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+p{
+  color: #688ff3;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.parent-name{
+  color: chartreuse;
+}
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0 10px;
+  margin-bottom: 15px;
+  background-color: #fff;
+}
+
+.input-group i {
+  font-size: 20px;
+  color: var(--primary-color);
+  margin-right: 10px;
+}
+
+.input-group input,
+.input-group select {
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  flex: 1;
+  font-size: 16px;
+  background: transparent;
+}
+
+.dashboard {
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .dashboard form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dashboard input[type="text"],
+  .dashboard input[type="hidden"],
+  .dashboard select,
+  .dashboard button {
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  .dashboard button {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .dashboard button:hover {
+    background-color: #0056b3;
+  }
+  
+  #map {
+    height: 40px;
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
