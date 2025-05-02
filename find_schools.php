@@ -1,12 +1,33 @@
 <?php
+session_start();
 include 'db.php';
 
+if(!isset($_SESSION['email'])) {
+    header("Location: index.html");
+    exit();
+}
+
 // Retrieve form inputs
+$email = $_Session['email'];
 $nic = $_POST['nic'];
 $gender = $_POST['gender'];
 $address = $_POST['address'];
 $latitude = floatval($_POST['latitude']);
 $longitude = floatval($_POST['longitude']);
+
+//user data update in database 
+$sql = "UPDATE users SET national_id = ?, address = ?, child_gender = ?, latitude = ?, longitude = ? WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssdds", $nic, $address, $gender, $latitude, $longitude, $email);
+
+if($stmt->execute()) {
+    echo "Details Updated Successfully. <a href='select_schools.php'>Proceed to select schools </a>";
+} else {
+    echo "Error Updating Details: " . $stmt->error;
+}
+
+$stmt->close();
+$conn->close();
 
 // Gender filter logic
 $gender_filter = $gender === 'boy' ? "'boys','mixed'" : "'girls','mixed'";
