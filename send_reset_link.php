@@ -24,7 +24,7 @@ if($result->num_rows > 0) {
 
     echo "<script>alert('Reset link has been sent to your email.'); window.location.href='index.html'<script/>";
 } else {
-    echo "<script>alert('Email not found.') window.location.href='forgot_password.php'<script/>"
+    echo "<script>alert('Email not found.') window.location.href='forgot_password.php'<script/>";
 }
 
 $conn->close();

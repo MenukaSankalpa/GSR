@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>Forgot Password</h2>
-    <form action="" method="POST">
+    <form action="send_reset_link.php" method="POST">
         <input type="email" name="email" id="" placeholder="Enter your email" required>
         <button type="submit">Send Reset Link</button>
     </form>
