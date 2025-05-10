@@ -1,4 +1,10 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vender/autoload.php'; //this is for if i used composer
+
 include 'db.php';
 
 $email = $_POST['email'];
@@ -16,16 +22,34 @@ $result = $stmt->get_result();
 if($result->num_rows > 0) {
     //save token and expiry in DB
     $update = $conn->prepare("UPDATE users SET reset_token = ?, token_expiry = ? WHERE email = ?");
-    $subject = "Password Reset";
-    $message = "Click this link to rest your password: $reset_link";
-    $headers = "From: no-reply@yourdomain.com";
+    $update->bind_param("sss", $token, $expiry, $email);
+    $update->execute();
 
-    mail($email,$subject,$message,$headers);
+    //prepare email
+    $mail = new PHPMailer(true);
 
-    echo "<script>alert('Reset link has been sent to your email.'); window.location.href='index.html'<script/>";
-} else {
-    echo "<script>alert('Email not found.') window.location.href='forgot_password.php'<script/>";
-}
+    try {
+        // Mailtrap SMTP settings
+        $mail->isSMTP();
+        $mail->Host = 'sandbox.smtp.mailtrap.io';
+        $mail->SMTPAuth= true;
+        $mail->Username ='b861e012eb86dc';
+        $mail->Password ='2977e5c0dbcde2';
+        $mail->Port =2525;
+
+        $mail->setForm('noreply@schooladmission.com', 'School Admission');
+        $mail->addAddress($email);
+        $mail->isHTML(true);
+        $mail->Subject = 'Password Reset Link';
+        $reset_link = "http://localhost/GSR/reset_password.php?token=$token";
+        $email-Body = "Click <a href='$reset_link'>here</a> to reset your password. This link will expire in 1 hour.";
+
+        $mail->send();
+        echo "<script>alert('Reset link sent to your email.'); window.location.href='index.html';</script>";
+
+    } catch (Exception $e) {
+        echo "<script>alert('Email not found'); window.location.href='forgot_password.php';</script>";
+    }
 
 $conn->close();
 ?>
