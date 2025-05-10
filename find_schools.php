@@ -8,10 +8,10 @@ if(!isset($_SESSION['email'])) {
 }
 
 // Retrieve form inputs
-$email = $_Session['email'];
+$email = $_SESSION['email'];
 $nic = $_POST['nic'];
-$gender = $_POST['gender'];
 $address = $_POST['address'];
+$gender = $_POST['gender'];
 $latitude = floatval($_POST['latitude']);
 $longitude = floatval($_POST['longitude']);
 
@@ -27,7 +27,7 @@ if($stmt->execute()) {
 }
 
 $stmt->close();
-$conn->close();
+
 
 // Gender filter logic
 $gender_filter = $gender === 'boy' ? "'boys','mixed'" : "'girls','mixed'";
@@ -42,14 +42,14 @@ $sql = "
         )) AS distance
     FROM schools
     WHERE type IN ($gender_filter)
-    HAVING distance <= 10
+    HAVING distance <= 20
     ORDER BY distance ASC
     LIMIT 5
 ";
 
 $result = $conn->query($sql);
 
-echo "<h2>Nearby Schools Within 10km</h2>";
+echo "<h2>Nearby Schools Within 20km</h2>";
 echo "<p><strong>NIC:</strong> " . htmlspecialchars($nic) . "</p>";
 echo "<p><strong>Child Gender:</strong> " . htmlspecialchars($gender) . "</p>";
 echo "<p><strong>Address:</strong> " . htmlspecialchars($address) . "</p><br>";
@@ -58,12 +58,12 @@ if ($result->num_rows > 0) {
     echo "<ul>";
     while ($row = $result->fetch_assoc()) {
         echo "<li><strong>" . htmlspecialchars($row['name']) . "</strong> – " 
-           . round($row['distance'], 2) . " km away (" 
-           . ucfirst($row['type']) . " school)</li>";
+            . round($row['distance'], 2) . " km away (" 
+            . ucfirst($row['type']) . " school)</li>";
     }
     echo "</ul>";
 } else {
-    echo "<p>No schools found within 10km matching your criteria.</p>";
+    echo "<p>No schools found within 20km matching your criteria.</p>";
 }
 
 $conn->close();
