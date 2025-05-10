@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vender/autoload.php'; //this is for if i used composer
+require 'vendor/autoload.php'; //this is for if i used composer
 
 include 'db.php';
 
@@ -37,19 +37,23 @@ if($result->num_rows > 0) {
         $mail->Password ='2977e5c0dbcde2';
         $mail->Port =2525;
 
-        $mail->setForm('noreply@schooladmission.com', 'School Admission');
+        $mail->setFrom('alone.monster13@gmail.com', 'School Admission');
         $mail->addAddress($email);
         $mail->isHTML(true);
         $mail->Subject = 'Password Reset Link';
         $reset_link = "http://localhost/GSR/reset_password.php?token=$token";
-        $email-Body = "Click <a href='$reset_link'>here</a> to reset your password. This link will expire in 1 hour.";
+        $mail->Body = "Click <a href='$reset_link'>here</a> to reset your password. This link will expire in 1 hour.";
+
 
         $mail->send();
         echo "<script>alert('Reset link sent to your email.'); window.location.href='index.html';</script>";
 
     } catch (Exception $e) {
-        echo "<script>alert('Email not found'); window.location.href='forgot_password.php';</script>";
+        echo "<script>alert('Message could not be sent. Mailer Error: {$email->ErrorInfo}'); window.location.href='forgot_password.php';</script>";
     }
+} else {
+    echo "<script>alert('Email not found'); window.location.href='forgot_password.php';</script>";
+}    
 
 $conn->close();
 ?>
