@@ -28,8 +28,8 @@ $_SESSION['child_name'] = $user['child_name'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
-
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqQzvjFRQDcaDNfu4OBIfj9lmQhTSkcLA&libraries=places"></script>
     <style>
         body {
@@ -45,7 +45,9 @@ $_SESSION['child_name'] = $user['child_name'];
             text-align: center;
         }
         h2{
+            text-align: center;
             font-size: 25px;
+            color: black;
         }
         #map {
             height: 40px;
@@ -62,18 +64,30 @@ $_SESSION['child_name'] = $user['child_name'];
 
 <div class="dashboard">
     <form action="find_schools.php" method="POST" id="locationForm">
-        <input type="text" name="nic" placeholder="NIC Number" required>
-        <input type="text" name="child_name" value="<?php echo htmlspecialchars($user['child_name']); ?>" readonly>
-
+        <div class="icon-group">
+            <input type="text" name="nic" placeholder="NIC Number" required>
+            <i class="ri-id-card-line"></i>
+        </div>
+        <div class="icon-group">
+            <input type="text" name="child_name" value="<?php echo htmlspecialchars($user['child_name']); ?>" readonly>
+            <i class='bxr  bx-child'  ></i> 
+        </div>
         <select name="gender" required>
             <option value="">Select Gender</option>
             <option value="boy">Boy</option>
             <option value="girl">Girl</option>
         </select>
 
-        <input type="text" id="address" name="address" placeholder="Type your address..." required> 
-        <input type="hidden" id="latitude" name="latitude">
-        <input type="hidden" id="longitude" name="longitude">
+        <div class="icon-group">
+            <input type="text" id="address" name="address" placeholder="Type your address..." required>
+            <i class='bxr  bx-location-blank'  ></i>  
+        </div>
+        <div class="icon-group">
+            <input type="hidden" id="latitude" name="latitude">
+        </div>
+        <div class="icon-group">
+            <input type="hidden" id="longitude" name="longitude">
+        </div>
 
         <div id="map"></div>
         <button type="submit">Find Nearby Schools</button>

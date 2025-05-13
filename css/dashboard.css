@@ -5,6 +5,25 @@
     --primary-second-color: #f5f9fa;
     --background-color: #FFFFF7;
 }
+body {
+    margin: 0;
+    padding-left: 40px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e6f0fa; 
+}
+
+section{
+    position: relative;
+    width: 850px;
+    height: 580px;
+    background: var(--background-color);
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
 h2{
   color: #f5f9fa;
   font-size: 24px;
@@ -16,7 +35,7 @@ p{
   margin-bottom: 10px;
 }
 .parent-name{
-  color: chartreuse;
+  color: rgb(189, 148, 148);
 }
 .input-group {
   display: flex;
