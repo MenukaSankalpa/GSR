@@ -11,14 +11,14 @@
     <header class="dashboard-header">
         <nav>
             <ul>
-                <li><a href="apply_school.php">APPLY SCHOOLS</a></li>
+                <li><a href="#" id="showFormBtn">APPLY SCHOOLS</a></li>
                 <li><a href="view_applications.php">VIEW APPLICATIONS</a></li>
                 <li><a href="submit_complaint.php">SUBMIT COMPLAINT</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="container" id="registrationForm">
+    <div class="container" id="registrationForm" style="display: none;">
         <h2>Apply For Schools</h2>
         <form id="applyForm" method="POST">
 
@@ -48,5 +48,14 @@
             <button type="button" id="submitApplication">Find Nearby Schools</button>
         </form>
     </div>
+
+<script>
+    document.getElementById('showFormBtn').addEventListener('click', function(event) {
+        event.preventDefault();
+        const form = document.getElementById('registrationForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }); 
+</script>
+
 </body>
 </html>
