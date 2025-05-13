@@ -5,16 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Dashboard</title>
     <link rel="stylesheet" href="css/pdashboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
 </head>
 <body>
     <header class="dashboard-header">
         <nav>
             <ul>
-                <li><a href="apply_school.php">Apply to Schools</a></li>
-                <li><a href="view_applications.php">View Applications</a></li>
-                <li><a href="submit_complaint.php">Submit Complaint</a></li>
+                <li><a href="apply_school.php">APPLY SCHOOLS</a></li>
+                <li><a href="view_applications.php">VIEW APPLICATIONS</a></li>
+                <li><a href="submit_complaint.php">SUBMIT COMPLAINT</a></li>
             </ul>
         </nav>
     </header>
+
+    <div id="registrationForm">
+        <h2>Apply For Schools</h2>
+        <form id="applyForm" method="POST">
+
+            <div class="input-group">
+                <input type="text" name="nin" placeholder="Parent NIC Number" required>
+                <i class="ri-info-card-fill"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" name="child_name" value="<?php echo htmlspecialchars($_SESSION['child_name']); ?>" readonly>
+                <i class="ri-account-box-fill"></i>
+            </div>
+
+            <div class="input-group">
+                <select name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="boy">Boy</option>
+                    <option value="girl">Girl</option>
+                </select>
+                <i class="ri-user-fill"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" name="address" placeholder="Address" required>
+                <i class="ri-user-location-fill"></i>
+            </div>
+
+            <button type="button" id="submitApplication">Find Nearby Schools</button>
+        </form>
+    </div>
 </body>
 </html>
