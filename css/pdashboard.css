@@ -120,3 +120,27 @@ body{
     background-color: #1457e7;
     color: #030303;
 }
+.header-text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+}
+.header-text h1 span {
+    display: inline-block;
+    font-size: 4rem;
+    color: #000000;
+    animation: bounce 01s ease-in-out infinite;
+    animation-delay: calc(0.1s * var(--i));
+    text-shadow: 2px 2px 4px rgb(0, 0, 0);
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
