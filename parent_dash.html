@@ -18,7 +18,7 @@
         </nav>
     </header>
 
-    <div class="header-text">
+    <div class="header-text" id="header-text"  >
         <h1>
             <span style="--i:1">H</span>
             <span style="--i:2">E</span>
@@ -63,10 +63,17 @@
 <script>
     document.getElementById('showFormBtn').addEventListener('click', function(event) {
         event.preventDefault();
+
         const form = document.getElementById('registrationForm');
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    }); 
+        const headerText = document.getElementById('header-text');
+
+        const isFormVisible = form.style.display === 'block';
+
+        form.style.display = isFormVisible ? 'none' : 'block';
+        headerText.style.display = isFormVisible ? 'flex' : 'none';
+    });
 </script>
+
 
 </body>
 </html>
