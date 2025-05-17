@@ -17,10 +17,12 @@ if($result->num_rows === 1) {
 
     session_start();
     $_SESSION['email'] = $user['email'];
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['role'] = $role;
 
     //Redirect pages based on roles 
     if ($role == '1'){
-        header("Location: parent_dashboard.php");
+        header("Location: parent_dash.php");
     } elseif ($role == '2') {
         header("Location: admin_dashboard.php");
     } elseif ($role == '3') {
