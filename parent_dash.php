@@ -86,13 +86,8 @@ $_SESSION['child_name'] = $user['child_name'];
             <input type="hidden" name="longitude" id="longitude">
 
             <div id="schoolResults"></div>
-            <button type="button" id="geocodeBtn">Get Location</button>
+        
             <button type="button" id="findSchoolsBtn">Find Nearby Schools</button>
-
-
-
-
-            <button type="button" id="submitApplication">Find Nearby Schools</button>
         </form>
     </div>
 
