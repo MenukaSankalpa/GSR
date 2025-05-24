@@ -1,11 +1,11 @@
 <?php
-include 'schools.php';
+$schools = include 'assets/schools.php';
 
 $lat = $_POST['latitude'];
 $lon = $_POST['longitude'];
 $gender = $_POST['gender'];
 
-function haversine($lat1, $lat1, $lat2, $lat2) {
+function haversine($lat1, $lon1, $lat2, $lon2) {
     $earth_radius = 6371;
 
     $dLat = deg2rad($lat2 - $lat1);
@@ -28,6 +28,27 @@ $filtered = array_filter($school, function($school) use ($gender) {
     return false;
 });
 
+// calculate distance 
+foreach ($filtered as &$school) {
+    $school['distance'] = haversine($lat, $lon, $school['lat'], $school['lon']);
+}
 
+// sort by distance 
+usort($filtered, function($a, $b){
+    return $a['distance'] <=> $b['distance'];
+});
 
+//limit 5 schools to show 
+$nearby = array_slice(array_filter($filtered, fn($s) => $s['distance'] <= 10), 0, 5);
+
+if(empty($nearby)){
+    echo "<p>No Schools Found</p>";
+} else {
+    echo "<h3>Nearby Schools:</h3><ul>";
+    foreach ($nearby as $school) {
+        $distance = number_format($school['distance'], 2);
+        echo "<li><strong>{$school['name']}</strong> - {$school['address']} ({$distance}&nbsp;km)</li>";
+    }
+    echo "</ul>";
+}
 ?>
