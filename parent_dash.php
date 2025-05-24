@@ -138,8 +138,36 @@ $_SESSION['child_name'] = $user['child_name'];
                 if (gender === 'girl') return ['girl', 'mixed'].includes(school.type);
             }
             return false;
-        }).slice(0, 5)
-    })
+        }).slice(0, 5);
+
+        const schoolResultsDiv = document.getElementById('schoolResults');
+        schoolResultsDiv.innerHTML = "<h3>Select up to 3 schools: </h3>";
+
+        if(filteredSchools.length === 0) {
+            schoolResultsDiv.innerHTML += "<p>No nearby schools found for the selected criteria.</p>";
+            return;
+        }
+
+        filteredSchools.forEach((school, index) => {
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.name = "selected_schools[]";
+            checkbox.value = school.name;
+            checkbox.id = `school_${index}`;
+            checkbox.classList.add("school-checkbox");
+
+            const label = document.createElement("label");
+            label.htmlFor = `school_${index}`;
+            label.textContent = `${school.name} (${school.type})`;
+
+            const div = document.createElement("div");
+            div.appendChild(checkbox);
+            div.appendChild(label);
+
+            schoolResultsDiv.appendChild(div);
+        });
+        limitCheckboxSelection("school-checkbox", 3);
+    });
 </script>
 </body>
 </html>
