@@ -1,43 +1,21 @@
 <?php
-include 'db.php';
+include 'schools.php';
 
 $lat = $_POST['latitude'];
-$lng = $_POST['longitude'];
+$lon = $_POST['longitude'];
 $gender = $_POST['gender'];
 
-// Gender logic: boys -> boys + mixed, girls -> girls + mixed
-$types = ($gender === 'boy') ? "'boys','mixed'" : "'girls','mixed'";
+function haversine($lat1, $lat1, $lat2, $lat2) {
+    $earth_radius = 6371;
 
-// SQL with Haversine formula to find schools within 10km
-$sql = "
-    SELECT *, (
-        6371 * acos(
-            cos(radians(?)) *
-            cos(radians(latitude)) *
-            cos(radians(longitude) - radians(?)) +
-            sin(radians(?)) *
-            sin(radians(latitude))
-        )
-    ) AS distance
-    FROM schools
-    WHERE type IN ($types)
-    HAVING distance <= 10
-    ORDER BY distance ASC
-    LIMIT 5
-";
+    $dLat = deg2rad($lat2 - $lat1);
+    $dLon = deg2rad($lon2 - $lon1);
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ddd", $lat, $lng, $lat);
-$stmt->execute();
-$result = $stmt->get_result();
+    $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon/2) * sin($dLon/2);
 
-if ($result->num_rows > 0) {
-    echo "<h3>Nearby Schools (within 10km):</h3><ul>";
-    while ($row = $result->fetch_assoc()) {
-        echo "<li>" . htmlspecialchars($row['name']) . " (" . htmlspecialchars($row['type']) . ")</li>";
-    }
-    echo "</ul>";
-} else {
-    echo "<p>No nearby schools found.</p>";
+    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+    return $earth_radius * $c;
 }
+
+
 ?>
