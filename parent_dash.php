@@ -80,7 +80,7 @@ $_SESSION['child_name'] = $user['child_name'];
             <div class="input-group">
                 <input id="address" type="text" name="address" placeholder="Address" required>
                 <i class="ri-user-location-fill"></i>
-            </div>
+            </div> 
             
             <input type="hidden" name="latitude" id="latitude">
             <input type="hidden" name="longitude" id="longitude">
@@ -122,6 +122,13 @@ $_SESSION['child_name'] = $user['child_name'];
         const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
         const data = await response.json();
 
+        const lat = parseFloat(data[0].lat);
+        const lng = parseFloat(data[0].lon);
+
+        document.getElementById("latitude").value = lat;
+        document.getElementById("longitude").value = lng;
+
+
         if(data.length === 0) {
             alert("Location not found.");
             return;
@@ -154,6 +161,8 @@ $_SESSION['child_name'] = $user['child_name'];
             checkbox.name = "selected_schools[]";
             checkbox.value = school.name;
             checkbox.id = `school_${index}`;
+            label.htmlFor = `school_${index}`;
+
             checkbox.classList.add("school-checkbox");
 
             const label = document.createElement("label");
@@ -184,6 +193,21 @@ $_SESSION['child_name'] = $user['child_name'];
     }
     function deg2rad(deg) {
         return deg * (Math.PI / 180);
+    }
+
+    // only 3 school selection
+    function limitCheckboxSelection(className, maxAllowed){
+        const checkboxes = document.querySelectorAll(`.${className}`);
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const checked = Array.from(checkboxes).filter(c => c.checked);
+                if(checked.length > maxAllowed){
+                    cb.checked = false;
+                    alert(`You can select up to ${maxAllowed} schools only.`);
+                }
+            });
+        });
+
     }
 </script>
 </body>
