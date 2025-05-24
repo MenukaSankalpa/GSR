@@ -17,5 +17,17 @@ function haversine($lat1, $lat1, $lat2, $lat2) {
     return $earth_radius * $c;
 }
 
+// school filter using gender
+
+$filtered = array_filter($school, function($school) use ($gender) {
+    if ($gender == 'boy') {
+        return $school['gender'] == 'boy' || $school['gender'] == 'mixed';
+    } elseif ($gender == 'girl') {
+        return $school['gender'] == 'girl' || $school['gender'] == 'mixed';
+    }
+    return false;
+});
+
+
 
 ?>
