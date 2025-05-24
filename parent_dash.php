@@ -106,55 +106,40 @@ $_SESSION['child_name'] = $user['child_name'];
         form.style.display = isFormVisible ? 'none' : 'block';
         headerText.style.display = isFormVisible ? 'flex' : 'none';
     });
-
-
-    //Geocode 
-    document.getElementById('geocodeBtn').addEventListener('click', function () {
-        const address = document.getElementById('address').value;
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    const lat = parseFloat(data[0].lat);
-                    const lon = parseFloat(data[0].lon);
-                    document.getElementById('latitude').value = lat;
-                    document.getElementById('longitude').value = lon;
-
-                    if (marker) map.removeLayer(marker);
-                    marker = L.marker([lat, lon]).addTo(map);
-                    map.setView([lat, lon], 14);
-                } else {
-                    alert("Address not found.");
-                }
-            });
-    });
-
-    // Find schools
-    document.getElementById('findSchoolsBtn').addEventListener('click', function () {
-        const lat = document.getElementById('latitude').value;
-        const lon = document.getElementById('longitude').value;
+</script>
+<script>
+    document.getElementById('findSchoolsBtn').addEventListener('click', async function () {
         const gender = document.getElementById('gender').value;
+        const address = document.getElementById('address').value;
 
-        if (!lat || !lon || !gender) {
-            alert("Please enter an address and select gender.");
+        if(!gender || !address) {
+            alert("Please select gender and enter an address");
             return;
         }
 
-        fetch('find_schools.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                latitude: lat,
-                longitude: lon,
-                gender: gender
-            })
-        })
-        .then(res => res.text())
-        .then(data => {
-            document.getElementById('schoolResults').innerHTML = data;
-        });
-    });
-    </script>
+        // get coordinates from nominatim API 
+        const query = encodeURIComponent(address);
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
+        const data = await response.json();
+
+        if(data.length === 0) {
+            alert("Location not found.");
+            return;
+        }
+
+        // fetch school list 
+        const schoolRes = await fetch('assets/schools.php');
+        const schools = await schoolRes.json();
+
+        const filteredSchools = schools.filter(school => {
+            const distance = getDistanceFromLatLonInKm(lat, lng, school.lat, school.lng);
+            if (distance <= 10){
+                if (gender === 'boy') return ['boy', 'mixed'].includes(school.type);
+                if (gender === 'girl') return ['girl', 'mixed'].includes(school.type);
+            }
+            return false;
+        }).slice(0, 5)
+    })
 </script>
 </body>
 </html>
