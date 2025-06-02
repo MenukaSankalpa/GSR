@@ -91,130 +91,126 @@ $_SESSION['child_name'] = $user['child_name'];
         </form>
     </div>
 
-    
-
 <script>
-
     const schoolArray = [
-            { name: "Kalutara Boys' School", type: "boy", address: "Galle Road, Kalutara", lat: 6.5836, lon: 79.9602 },
-            { name: "Kalutara Balika Vidyalaya", type: "girl", address: "Main Street, Kalutara", lat: 6.5823, lon: 79.9609 },
-            { name: "Holy Cross College", type: "mixed", address: "Nagoda Road, Kalutara", lat: 6.5810, lon: 79.9631 },
-            { name: "Tissa Central College", type: "mixed", address: "Panadura Road, Kalutara", lat: 6.5861, lon: 79.9605 },
-            { name: "St. John's College", type: "boy", address: "Kuda Waskaduwa, Kalutara", lat: 6.5887, lon: 79.9600 },
-            { name: "Kalutara Muslim Girls School", type: "girl", address: "Beruwala Road, Kalutara", lat: 6.5820, lon: 79.9620 },
-            { name: "Al-Hambra Maha Vidyalaya", type: "mixed", address: "Katukurunda, Kalutara", lat: 6.5782, lon: 79.9635 },
-            { name: "St. Thomas' Boys School", type: "boy", address: "Wadduwa, Kalutara", lat: 6.6345, lon: 79.9281 },
-            { name: "Sagara Balika Vidyalaya", type: "girl", address: "Payagala, Kalutara", lat: 6.5334, lon: 79.9622 },
-            { name: "Royal Central College", type: "mixed", address: "Nagoda, Kalutara", lat: 6.5801, lon: 79.9520 },
-            { name: "Vijaya National School", type: "mixed", address: "Maggona, Kalutara", lat: 6.5588, lon: 79.9780 },
-            { name: "St. Mary's Girls' School", type: "girl", address: "Kalutara North", lat: 6.5900, lon: 79.9580 },
-            { name: "Vidyaloka Maha Vidyalaya", type: "mixed", address: "Bombuwala, Kalutara", lat: 6.6050, lon: 79.9450 },
-            { name: "Panadura Royal College", type: "boy", address: "Panadura, Kalutara District", lat: 6.7143, lon: 79.9040 },
-            { name: "Sethubandhan Girls' College", type: "girl", address: "Beruwala, Kalutara District", lat: 6.4750, lon: 79.9820 }
-        ];
+        { name: "Kalutara Boys' School", type: "boy", address: "Galle Road, Kalutara", lat: 6.5836, lon: 79.9602 },
+        { name: "Kalutara Balika Vidyalaya", type: "girl", address: "Main Street, Kalutara", lat: 6.5823, lon: 79.9609 },
+        { name: "Holy Cross College", type: "mixed", address: "Nagoda Road, Kalutara", lat: 6.5810, lon: 79.9631 },
+        { name: "Tissa Central College", type: "mixed", address: "Panadura Road, Kalutara", lat: 6.5861, lon: 79.9605 },
+        { name: "St. John's College", type: "boy", address: "Kuda Waskaduwa, Kalutara", lat: 6.5887, lon: 79.9600 },
+        { name: "Kalutara Muslim Girls School", type: "girl", address: "Beruwala Road, Kalutara", lat: 6.5820, lon: 79.9620 },
+        { name: "Al-Hambra Maha Vidyalaya", type: "mixed", address: "Katukurunda, Kalutara", lat: 6.5782, lon: 79.9635 },
+        { name: "St. Thomas' Boys School", type: "boy", address: "Wadduwa, Kalutara", lat: 6.6345, lon: 79.9281 },
+        { name: "Sagara Balika Vidyalaya", type: "girl", address: "Payagala, Kalutara", lat: 6.5334, lon: 79.9622 },
+        { name: "Royal Central College", type: "mixed", address: "Nagoda, Kalutara", lat: 6.5801, lon: 79.9520 },
+        { name: "Vijaya National School", type: "mixed", address: "Maggona, Kalutara", lat: 6.5588, lon: 79.9780 },
+        { name: "St. Mary's Girls' School", type: "girl", address: "Kalutara North", lat: 6.5900, lon: 79.9580 },
+        { name: "Vidyaloka Maha Vidyalaya", type: "mixed", address: "Bombuwala, Kalutara", lat: 6.6050, lon: 79.9450 },
+        { name: "Panadura Royal College", type: "boy", address: "Panadura, Kalutara District", lat: 6.7143, lon: 79.9040 },
+        { name: "Sethubandhan Girls' College", type: "girl", address: "Beruwala, Kalutara District", lat: 6.4750, lon: 79.9820 }
+    ];
+
+    // Haversine distance formula
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius of Earth in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) ** 2 +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
     document.getElementById('showFormBtn').addEventListener('click', function(event) {
         event.preventDefault();
-
         const form = document.getElementById('registrationForm');
         const headerText = document.getElementById('header-text');
-
         const isFormVisible = form.style.display === 'block';
-
         form.style.display = isFormVisible ? 'none' : 'block';
         headerText.style.display = isFormVisible ? 'flex' : 'none';
     });
 
     document.getElementById('findSchoolsBtn').addEventListener('click', async function () {
-    const address = document.getElementById('address').value;
-    const gender = document.getElementById('gender').value;
-    const schoolResults = document.getElementById('schoolResults');
-
-
-        // get coordinates from nominatim API 
-        const query = encodeURIComponent(address);
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
-        const data = await response.json();
+        const address = document.getElementById('address').value;
+        const gender = document.getElementById('gender').value;
+        const schoolResults = document.getElementById('schoolResults');
 
         if (!address || !gender) {
-        alert("Please enter both address and gender.");
-        return;
-    }
+            alert("Please enter both address and gender.");
+            return;
+        }
 
+        // Get coordinates
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+        const geoData = await geoRes.json();
 
-    // Get coordinates from address using Nominatim
-    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
-    const geoData = await geoRes.json();
+        if (!geoData || geoData.length === 0) {
+            alert("Address not found.");
+            return;
+        }
 
-    if (!geoData || geoData.length === 0) {
-        alert("Address not found.");
-        return;
-    }
+        const userLat = parseFloat(geoData[0].lat);
+        const userLon = parseFloat(geoData[0].lon);
+        document.getElementById('latitude').value = userLat;
+        document.getElementById('longitude').value = userLon;
 
-    const userLat = parseFloat(geoData[0].lat);
-    const userLon = parseFloat(geoData[0].lon);
-
-        // Filter school array
         const allowedTypes = (gender === 'boy') ? ['boy', 'mixed'] : ['girl', 'mixed'];
 
         const nearbySchools = schoolArray
             .filter(school => allowedTypes.includes(school.type))
-            .map(school => {
-                const distance = getDistance(userLat, userLon, school.lat, school.lon);
-                return { ...school, distance };
-            })
+            .map(school => ({ ...school, distance: getDistance(userLat, userLon, school.lat, school.lon) }))
             .filter(s => s.distance <= 10)
             .sort((a, b) => a.distance - b.distance)
             .slice(0, 5);
 
-    // Display results
-    schoolResults.innerHTML = "<h3>Nearby Schools:</h3>";
-    if (nearbySchools.length === 0) {
-        schoolResults.innerHTML += "<p>No schools found within 10km.</p>";
-    } else {
-        /*const list = document.createElement('ul');
-        nearbySchools.forEach(school => {
-            const li = document.createElement('li');
-            li.textContent = `${school.name} (${school.type}) - ${school.address} [${school.distance.toFixed(2)} km]`;
-            list.appendChild(li);
-        });
-        schoolResults.appendChild(list);*/
+        // Show results
+        schoolResults.innerHTML = "<h3>Nearby Schools:</h3>";
+
+        if (nearbySchools.length === 0) {
+            schoolResults.innerHTML += "<p>No schools found within 10km.</p>";
+            return;
+        }
+
         let tableHTML = `
-        <form id="schoolSelectForm" method="POST" action="submit_schools.php">
-        <table class="school-table">
-            <tread>
-                <tr>
-                    <th>School Name</th>
-                    <th>Type</th>
-                    <th>Distance(Km)</th>
-                    <th>Select</th>
-                </tr>
-            </thread>
-            <tbody>
+            <form id="schoolSelectForm" method="POST" action="submit_schools.php">
+            <table class="school-table">
+                <thead>
+                    <tr>
+                        <th>School Name</th>
+                        <th>Type</th>
+                        <th>Distance (Km)</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
         `;
 
         nearbySchools.forEach((school, index) => {
             tableHTML += `
-            <tr>
-                <td>${school.name}</td>
-                <td>${school.type.charAt(0).toUpperCase() + school.type.slice(1)}</td>
-                <td>${school.distance.toFixed(2)}</td>
-                <td>
-                    <input type="checkbox" name="selected_schools[]" value="${school.name}" class="school-checkbox">
-                </td>
-            </tr>
+                <tr>
+                    <td>${school.name}</td>
+                    <td>${school.type.charAt(0).toUpperCase() + school.type.slice(1)}</td>
+                    <td>${school.distance.toFixed(2)}</td>
+                    <td>
+                        <input type="checkbox" name="selected_schools[]" value="${school.name}" class="school-checkbox">
+                    </td>
+                </tr>
             `;
         });
+
         tableHTML += `
-            </tbody>
+                </tbody>
             </table>
             <div style="margin-top: 15px;">
                 <button type="submit" id="submitSelected" class="submit-btn" disabled>Submit</button>
             </div>
-        </form>
+            </form>
         `;
+
         schoolResults.innerHTML += tableHTML;
 
-        // 3 schools select code 
+        // Enable/limit checkbox selection
         const checkboxes = document.querySelectorAll('.school-checkbox');
         const submitBtn = document.getElementById('submitSelected');
 
@@ -225,11 +221,11 @@ $_SESSION['child_name'] = $user['child_name'];
                     cb.checked = false;
                     alert("You can select only 3 schools!");
                 }
-                submitBtn.ariaDisabled = selected.length === 0;
+                submitBtn.disabled = selected.length === 0;
             });
         });
-    };
-});
+    });
 </script>
+
 </body>
 </html>
