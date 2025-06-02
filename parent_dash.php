@@ -91,10 +91,27 @@ $_SESSION['child_name'] = $user['child_name'];
         </form>
     </div>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     
+
 <script>
+
+    const schoolArray = [
+            { name: "Kalutara Boys' School", type: "boy", address: "Galle Road, Kalutara", lat: 6.5836, lon: 79.9602 },
+            { name: "Kalutara Balika Vidyalaya", type: "girl", address: "Main Street, Kalutara", lat: 6.5823, lon: 79.9609 },
+            { name: "Holy Cross College", type: "mixed", address: "Nagoda Road, Kalutara", lat: 6.5810, lon: 79.9631 },
+            { name: "Tissa Central College", type: "mixed", address: "Panadura Road, Kalutara", lat: 6.5861, lon: 79.9605 },
+            { name: "St. John's College", type: "boy", address: "Kuda Waskaduwa, Kalutara", lat: 6.5887, lon: 79.9600 },
+            { name: "Kalutara Muslim Girls School", type: "girl", address: "Beruwala Road, Kalutara", lat: 6.5820, lon: 79.9620 },
+            { name: "Al-Hambra Maha Vidyalaya", type: "mixed", address: "Katukurunda, Kalutara", lat: 6.5782, lon: 79.9635 },
+            { name: "St. Thomas' Boys School", type: "boy", address: "Wadduwa, Kalutara", lat: 6.6345, lon: 79.9281 },
+            { name: "Sagara Balika Vidyalaya", type: "girl", address: "Payagala, Kalutara", lat: 6.5334, lon: 79.9622 },
+            { name: "Royal Central College", type: "mixed", address: "Nagoda, Kalutara", lat: 6.5801, lon: 79.9520 },
+            { name: "Vijaya National School", type: "mixed", address: "Maggona, Kalutara", lat: 6.5588, lon: 79.9780 },
+            { name: "St. Mary's Girls' School", type: "girl", address: "Kalutara North", lat: 6.5900, lon: 79.9580 },
+            { name: "Vidyaloka Maha Vidyalaya", type: "mixed", address: "Bombuwala, Kalutara", lat: 6.6050, lon: 79.9450 },
+            { name: "Panadura Royal College", type: "boy", address: "Panadura, Kalutara District", lat: 6.7143, lon: 79.9040 },
+            { name: "Sethubandhan Girls' College", type: "girl", address: "Beruwala, Kalutara District", lat: 6.4750, lon: 79.9820 }
+        ];
     document.getElementById('showFormBtn').addEventListener('click', function(event) {
         event.preventDefault();
 
@@ -106,109 +123,113 @@ $_SESSION['child_name'] = $user['child_name'];
         form.style.display = isFormVisible ? 'none' : 'block';
         headerText.style.display = isFormVisible ? 'flex' : 'none';
     });
-</script>
-<script>
-    document.getElementById('findSchoolsBtn').addEventListener('click', async function () {
-        const gender = document.getElementById('gender').value;
-        const address = document.getElementById('address').value;
 
-        if(!gender || !address) {
-            alert("Please select gender and enter an address");
-            return;
-        }
+    document.getElementById('findSchoolsBtn').addEventListener('click', async function () {
+    const address = document.getElementById('address').value;
+    const gender = document.getElementById('gender').value;
+    const schoolResults = document.getElementById('schoolResults');
+
 
         // get coordinates from nominatim API 
         const query = encodeURIComponent(address);
         const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
         const data = await response.json();
 
-        const lat = parseFloat(data[0].lat);
-        const lng = parseFloat(data[0].lon);
+        if (!address || !gender) {
+        alert("Please enter both address and gender.");
+        return;
+    }
 
-        document.getElementById("latitude").value = lat;
-        document.getElementById("longitude").value = lng;
 
+    // Get coordinates from address using Nominatim
+    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+    const geoData = await geoRes.json();
 
-        if(data.length === 0) {
-            alert("Location not found.");
-            return;
-        }
+    if (!geoData || geoData.length === 0) {
+        alert("Address not found.");
+        return;
+    }
 
-        // fetch school list 
-        const schoolRes = await fetch('assets/schools.php');
-        const schools = await schoolRes.json();
+    const userLat = parseFloat(geoData[0].lat);
+    const userLon = parseFloat(geoData[0].lon);
 
-        const filteredSchools = schools.filter(school => {
-            const distance = getDistanceFromLatLonInKm(lat, lng, school.lat, school.lng);
-            if (distance <= 10){
-                if (gender === 'boy') return ['boy', 'mixed'].includes(school.type);
-                if (gender === 'girl') return ['girl', 'mixed'].includes(school.type);
-            }
-            return false;
-        }).slice(0, 5);
+        // Filter school array
+        const allowedTypes = (gender === 'boy') ? ['boy', 'mixed'] : ['girl', 'mixed'];
 
-        const schoolResultsDiv = document.getElementById('schoolResults');
-        schoolResultsDiv.innerHTML = "<h3>Select up to 3 schools: </h3>";
+        const nearbySchools = schoolArray
+            .filter(school => allowedTypes.includes(school.type))
+            .map(school => {
+                const distance = getDistance(userLat, userLon, school.lat, school.lon);
+                return { ...school, distance };
+            })
+            .filter(s => s.distance <= 10)
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, 5);
 
-        if(filteredSchools.length === 0) {
-            schoolResultsDiv.innerHTML += "<p>No nearby schools found for the selected criteria.</p>";
-            return;
-        }
-
-        filteredSchools.forEach((school, index) => {
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.name = "selected_schools[]";
-            checkbox.value = school.name;
-            checkbox.id = `school_${index}`;
-            label.htmlFor = `school_${index}`;
-
-            checkbox.classList.add("school-checkbox");
-
-            const label = document.createElement("label");
-            label.htmlFor = `school_${index}`;
-            label.textContent = `${school.name} (${school.type})`;
-
-            const div = document.createElement("div");
-            div.appendChild(checkbox);
-            div.appendChild(label);
-
-            schoolResultsDiv.appendChild(div);
+    // Display results
+    schoolResults.innerHTML = "<h3>Nearby Schools:</h3>";
+    if (nearbySchools.length === 0) {
+        schoolResults.innerHTML += "<p>No schools found within 10km.</p>";
+    } else {
+        /*const list = document.createElement('ul');
+        nearbySchools.forEach(school => {
+            const li = document.createElement('li');
+            li.textContent = `${school.name} (${school.type}) - ${school.address} [${school.distance.toFixed(2)} km]`;
+            list.appendChild(li);
         });
-        limitCheckboxSelection("school-checkbox", 3);
-    });
+        schoolResults.appendChild(list);*/
+        let tableHTML = `
+        <form id="schoolSelectForm" method="POST" action="submit_schools.php">
+        <table class="school-table">
+            <tread>
+                <tr>
+                    <th>School Name</th>
+                    <th>Type</th>
+                    <th>Distance(Km)</th>
+                    <th>Select</th>
+                </tr>
+            </thread>
+            <tbody>
+        `;
 
-    //havershine formula
-    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = deg2rad(lat2-lat1);
-        const dLon = deg2rad(lon2-lon1);
-        const  a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 -a));
-        return R * c;
-    }
-    function deg2rad(deg) {
-        return deg * (Math.PI / 180);
-    }
+        nearbySchools.forEach((school, index) => {
+            tableHTML += `
+            <tr>
+                <td>${school.name}</td>
+                <td>${school.type.charAt(0).toUpperCase() + school.type.slice(1)}</td>
+                <td>${school.distance.toFixed(2)}</td>
+                <td>
+                    <input type="checkbox" name="selected_schools[]" value="${school.name}" class="school-checkbox">
+                </td>
+            </tr>
+            `;
+        });
+        tableHTML += `
+            </tbody>
+            </table>
+            <div style="margin-top: 15px;">
+                <button type="submit" id="submitSelected" class="submit-btn" disabled>Submit</button>
+            </div>
+        </form>
+        `;
+        schoolResults.innerHTML += tableHTML;
 
-    // only 3 school selection
-    function limitCheckboxSelection(className, maxAllowed){
-        const checkboxes = document.querySelectorAll(`.${className}`);
+        // 3 schools select code 
+        const checkboxes = document.querySelectorAll('.school-checkbox');
+        const submitBtn = document.getElementById('submitSelected');
+
         checkboxes.forEach(cb => {
             cb.addEventListener('change', () => {
-                const checked = Array.from(checkboxes).filter(c => c.checked);
-                if(checked.length > maxAllowed){
+                const selected = document.querySelectorAll('.school-checkbox:checked');
+                if (selected.length > 3) {
                     cb.checked = false;
-                    alert(`You can select up to ${maxAllowed} schools only.`);
+                    alert("You can select only 3 schools!");
                 }
+                submitBtn.ariaDisabled = selected.length === 0;
             });
         });
-
-    }
+    };
+});
 </script>
 </body>
 </html>
