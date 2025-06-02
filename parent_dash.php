@@ -84,12 +84,11 @@ $_SESSION['child_name'] = $user['child_name'];
             
             <input type="hidden" name="latitude" id="latitude">
             <input type="hidden" name="longitude" id="longitude">
-
-            <div id="schoolResults"></div>
         
-            <button type="button" id="findSchoolsBtn">Find Nearby Schools</button>
+            <button type="submit" id="findSchoolsBtn">Find Nearby Schools</button>
         </form>
     </div>
+    <div id="schoolResults" style="display: none;"></div>
 
 <script>
     const schoolArray = [
@@ -109,6 +108,7 @@ $_SESSION['child_name'] = $user['child_name'];
         { name: "Panadura Royal College", type: "boy", address: "Panadura, Kalutara District", lat: 6.7143, lon: 79.9040 },
         { name: "Sethubandhan Girls' College", type: "girl", address: "Beruwala, Kalutara District", lat: 6.4750, lon: 79.9820 }
     ];
+
 
     // Haversine distance formula
     function getDistance(lat1, lon1, lat2, lon2) {
@@ -131,17 +131,20 @@ $_SESSION['child_name'] = $user['child_name'];
         headerText.style.display = isFormVisible ? 'flex' : 'none';
     });
 
-    document.getElementById('findSchoolsBtn').addEventListener('click', async function () {
+    document.getElementById('findSchoolsBtn').addEventListener('click', async function (event) {
+    event.preventDefault(); // prevent default form submission
+
+    try {
         const address = document.getElementById('address').value;
         const gender = document.getElementById('gender').value;
         const schoolResults = document.getElementById('schoolResults');
+        const registrationForm = document.getElementById('registrationForm');
 
         if (!address || !gender) {
             alert("Please enter both address and gender.");
             return;
         }
 
-        // Get coordinates
         const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
         const geoData = await geoRes.json();
 
@@ -169,6 +172,8 @@ $_SESSION['child_name'] = $user['child_name'];
 
         if (nearbySchools.length === 0) {
             schoolResults.innerHTML += "<p>No schools found within 10km.</p>";
+            schoolResults.style.display = "block";
+            registrationForm.style.display = "none";
             return;
         }
 
@@ -209,6 +214,8 @@ $_SESSION['child_name'] = $user['child_name'];
         `;
 
         schoolResults.innerHTML += tableHTML;
+        schoolResults.style.display = "block";
+        registrationForm.style.display = "none";
 
         // Enable/limit checkbox selection
         const checkboxes = document.querySelectorAll('.school-checkbox');
@@ -224,7 +231,13 @@ $_SESSION['child_name'] = $user['child_name'];
                 submitBtn.disabled = selected.length === 0;
             });
         });
-    });
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to fetch location. Please try again.");
+    }
+});
+
 </script>
 
 </body>
