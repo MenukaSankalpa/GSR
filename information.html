@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Information Submission</title>
+  <meta charset="UTF-8">
+  <title>Editable Inputs</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Submit Information</h2>
-    <form id="myForm" action="">
-        <input type="text">
-        <button></button>
-        <input type="text">
-        <input type="text">
-        <input type="text">
-        <input type="text">
-        <button type="submit">Submit</button>
-    </form>
+  <div class="form-container">
+    <div class="field-group">
+      <input type="text" value="John Doe" disabled id="name">
+      <button onclick="enableEdit('name')">Edit</button>
+    </div>
+    <div class="field-group">
+      <input type="email" value="john@example.com" disabled id="email">
+      <button onclick="enableEdit('email')">Edit</button>
+    </div>
+    <div class="field-group">
+      <input type="tel" value="123-456-7890" disabled id="phone">
+      <button onclick="enableEdit('phone')">Edit</button>
+    </div>
+    <div class="field-group">
+      <input type="text" value="123 Main St" disabled id="address">
+      <button onclick="enableEdit('address')">Edit</button>
+    </div>
+    <div class="field-group">
+      <input type="file" id="photo">
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
