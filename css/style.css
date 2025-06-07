@@ -235,6 +235,7 @@ select{
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    outline: none;
 } 
 .field-group input{
     flex: 1;
@@ -242,6 +243,7 @@ select{
     font-size: 16px;
     margin-right: 10px;
     border: none;
+    outline: none;
     border-radius: 5px;
     background-color: #cfcfcf;
 }
