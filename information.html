@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Editable Inputs</title>
+  <title>Information Fill Section</title>
   <link rel="stylesheet" href="css\style.css">
 </head>
 <body>
   <div class="form-container">
-    <h2>Information Fill Section</h2>
+    <h2>Child Information</h2>
     <div class="field-group">
-      <input type="text" placeholder="Child Name in full" id="name">
+      <input type="text" placeholder="Name in full" id="name">
       <button onclick="enableEdit('name')">Edit</button>
     </div>
     <div class="field-group">
-      <input type="text" placeholder="Child Name with inisials" id="name">
+      <input type="text" placeholder="Name with inisials" id="name">
       <button onclick="enableEdit('name')">Edit</button>
     </div>
     <div class="field-group">
@@ -25,8 +25,26 @@
       <button onclick="enableEdit('dob')">Edit</button>
     </div>
     <div class="field-group">
-      <input type="date" placeholder="Child Age" id="age">
+      <input type="" placeholder="Age" id="age">
       <button onclick="enableEdit('address')">Edit</button>
+    </div>
+
+    <h2>Applicant Information</h2>
+    <div class="field-group">
+      <input type="text" placeholder="Name in full" id="name">
+      <button onclick="enableEdit('name')">Edit</button>
+    </div>
+    <div class="field-group">
+      <input type="text" placeholder="Name with inisials" id="name">
+      <button onclick="enableEdit('name')">Edit</button>
+    </div>
+    <div class="field-group">
+      <input type="text" placeholder="Religion" id="religion">
+      <button onclick="enableEdit('religion')">Edit</button>
+    </div>
+    <div class="field-group">
+      <input type="text" placeholder="NIC Number" id="nic">
+      <button onclick="enableEdit('religion')">Edit</button>
     </div>
     <div class="field-group">
       <input type="file" id="photo">
